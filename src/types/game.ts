@@ -34,6 +34,8 @@ export interface Game {
   players: GamePlayer[];
   // shuffledDeck: string[];
   currentCardsOnTable: TableCard[];
+  dealer: number;
+  isStart: boolean;
   currentPlayer: number;
   picker: string;
   secretTeam: string[];
