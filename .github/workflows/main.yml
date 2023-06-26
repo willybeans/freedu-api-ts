@@ -1,34 +1,42 @@
 on: [push]
 
 jobs:
+ 	install: 
+		runs-on: ubuntu-latest
+		name: Install npm
+		steps:
+			- uses: actions/checkout@v1
+			- uses: actions/setup-node@v1
+				with:
+					node-version: '14.x'
+			- run: npm install
   lint:
     runs-on: ubuntu-latest
     name: Run eslint
+    needs: [install]
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
         with:
-          node-version: '14.x'
-      - run: npm 
+          node-version: '14.x' 
       - run: npm lint
   tsc:
     runs-on: ubuntu-latest
     name: Check typescript
+		needs: [install]
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
         with:
-          node-version: '14.x'
-      - run: npm 
+          node-version: '14.x' 
       - run: npm tsc
   jest:
     runs-on: ubuntu-latest
     name: Run tests
-    needs: [lint, tsc] # ensure tests are run only after eslint and tsc pass
+    needs: [install, lint, tsc] # ensure tests are run only after eslint and tsc pass
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
         with:
           node-version: '14.x'
-      - run: npm
       - run: npm test
