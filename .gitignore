@@ -1,4 +1,8 @@
 node_modules
 dist
 coverage
-
+logs
+# Ignore vim files:
+*~
+*.swp
+*.swo

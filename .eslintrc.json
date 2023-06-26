@@ -26,7 +26,7 @@
     "linebreak-style": ["error", "unix"],
     "quotes": ["error", "single"],
     "semi": "off",
-
+		"node/no-unpublished-require": "off",
     "@typescript-eslint/indent": "off",
     "@typescript-eslint/semi": "off",
     "@typescript-eslint/member-delimiter-style": "off",

@@ -1,5 +1,10 @@
 import request from 'supertest';
-import app from '../src/index';
+import { app } from '../src/app';
+
+// afterAll(done => {
+// //    app.close();
+//     done();
+// });
 
 describe('Example Test', () => {
   it('should return "healthcheck"', async () => {
@@ -8,4 +13,3 @@ describe('Example Test', () => {
     expect(response.text).toBe('healthcheck');
   });
 });
-
