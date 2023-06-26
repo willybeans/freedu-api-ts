@@ -12,7 +12,7 @@ const app: Express = express();
 const port = process.env.PORT
 
 app.use(morganConfig);
-
+// testing linter
 // Redirect HTTP to HTTPS (if you have a valid SSL certificate)
 // app.use(enforceSSL.HTTPS({ trustProtoHeader: true }));
 // 
