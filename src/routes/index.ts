@@ -1,10 +1,10 @@
-import { Router, Request, Response } from 'express';
+import { type Request, type Response, Router } from 'express';
 
 const router = Router();
 // Define your REST API endpoints here
 
 router.get('/healthcheck', (req: Request, res: Response) => {
-	res.send('healthcheck');
+  res.send('healthcheck');
 });
 
 router.get('/api/users', (req: Request, res: Response) => {
@@ -13,4 +13,3 @@ router.get('/api/users', (req: Request, res: Response) => {
 });
 
 export default router;
-
