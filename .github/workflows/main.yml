@@ -1,29 +1,24 @@
-name: CI
-
-on: [push]
+name: Demo GitHub Actions
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  build:
-   runs-on: ubuntu-18.04
-
-    name: Build
-    strategy:
-      matrix:
-        node_version: [16, 18]
-
+  test-job:
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - name: Use Node.js ${{ matrix.node_version }}
-        uses: actions/setup-node@v1
-        with:
-          node_version: ${{ matrix.node_version }}
+    - name: Checkout
+      uses: actions/checkout@v3
 
-      - name: run CI
-        run: npm install 
-      - name: run linter
-				run: npm run lint 
-			- name: run tests
-        run: npm run test 
-      - name: run build
-				run: npm run build 
+    - name: Use Node 17.x
+      uses: actions/setup-node@v3
+      with:
+        node-version: '17.x'
 
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Test
+      run: npm test
