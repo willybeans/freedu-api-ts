@@ -7,7 +7,7 @@
     "build": "npx tsc",
     "start": "node dist/server.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/server.js\"",
-    "test": "jest --coverage",
+    "test": "jest --coverage --testTimeout=5000",
     "test:watch": "jest --watch",
     "lint": "eslint --ext .ts src",
     "lint:fix": "eslint --ext .ts src --fix",
