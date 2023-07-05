@@ -2,7 +2,12 @@ node_modules
 dist
 coverage
 logs
+logs/*.log
 # Ignore vim files:
 *~
 *.swp
 *.swo
+# Ignore mac finder 
+.DS_Store
+# env files
+.env

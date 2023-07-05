@@ -18,7 +18,7 @@
     "skipLibCheck": true,
 		"noImplicitAny": true
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "client.js"],
   "exclude": ["node_modules", "./coverage", "./dist", "jest.config.js"]
 }
 

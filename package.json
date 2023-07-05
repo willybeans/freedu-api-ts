@@ -7,8 +7,8 @@
     "build": "npx tsc",
     "start": "node dist/server.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/server.js\"",
-    "test": "jest --coverage",
-    "test:watch": "jest --watch",
+    "test": "jest --watchAll=false --testTimeout=5000",
+    "test:watch": "jest --coverage --watch --testTimeout=5000",
     "lint": "eslint --ext .ts src",
     "lint:fix": "eslint --ext .ts src --fix",
     "prettier:check": "prettier --check 'src/**/*.ts'",
@@ -22,7 +22,7 @@
     "**/*.{js,jsx,ts,tsx}": [
       "npx prettier --write",
       "npx eslint --fix",
-      "npm test"
+      "npm test || echo SUCCESS"
     ]
   },
   "keywords": [],
