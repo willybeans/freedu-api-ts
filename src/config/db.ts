@@ -3,22 +3,28 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const port: number = parseInt(<string>process.env.DB_PORT, 10) || 5432;
+const port: number = parseInt(<string>process.env.POSTGRES_PORT, 10) || 5432;
+
+console.log('test:', process.env.POSTGRES_CLIENT_PASSWORD);
+console.log('test:', process.env.POSTGRES_NAME);
+console.log('test:', process.env.POSTGRES_HOST);
+console.log('test:', process.env.POSTGRES_PORT);
+console.log('test:', process.env.POSTGRES_USER);
 
 export const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
+  user: process.env.POSTGRES_USER,
+  host: process.env.POSTGRES_HOST,
+  database: process.env.POSTGRES_NAME,
+  password: process.env.POSTGRES_CLIENT_PASSWORD,
   port
 });
 pool.on('error', (err) => {
   console.log(err);
 });
 
-export const query = async (text: string) => {
+export const query = async (text: string, values: Array<string | number>) => {
   const start = Date.now();
-  const res = await pool.query(text);
+  const res = await pool.query(text, values);
   const duration = Date.now() - start;
   // log here for dev
   console.log('executed query', { text, duration, rows: res.rowCount });

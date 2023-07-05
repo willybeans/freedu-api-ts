@@ -1,42 +1,54 @@
 import request from 'supertest';
 import { app } from '../app';
-import { pool, query } from '../config/db';
+import { pool } from '../config/db';
+import { type Pool } from 'pg';
 
-require('dotenv').config();
+console.log('test:', process.env.POSTGRES_CLIENT_PASSWORD);
+console.log('test:', process.env.POSTGRES_NAME);
+console.log('test:', process.env.POSTGRES_HOST);
+console.log('test:', process.env.POSTGRES_PORT);
+console.log('test:', process.env.POSTGRES_USER);
 
-describe('testing postgres', () => {
-  let pgPool;
+describe('testing endpoints with database', () => {
+  let pgPool: Pool;
 
   beforeAll(() => {
-    // pgPool = pool;
-    pool.connect();
+    pgPool = pool;
   });
 
   afterAll(async () => {
-    await pool.end();
+    await pgPool.end();
   });
 
-  it('should test', async () => {
+  it('/getUser?id=2', async () => {
     const client = await pgPool.connect();
     try {
-      await client.query('BEGIN');
-
-      const { rows } = await client.query('SELECT 1 AS "result"');
-      expect(rows[0]['result']).toBe(1);
-
-      await client.query('ROLLBACK');
+      const res = await request(app).get('/getUser?id=2');
+      expect(res.status).toBe(200);
+      expect(res.body).toEqual({
+        user: {
+          id: 2,
+          username: 'testname',
+          password: '123456abcdef'
+        }
+      });
     } catch (err) {
-      throw err;
+      console.error(err);
     } finally {
       client.release();
     }
   });
-});
 
-describe('Example Test', () => {
-  it('should return "healthcheck"', async () => {
-    const response = await request(app).get('/healthcheck');
-    expect(response.status).toBe(200);
-    expect(response.text).toBe('healthcheck');
+  it('when user doesnt exist /getUser?id=1', async () => {
+    const client = await pgPool.connect();
+    try {
+      const res = await request(app).get('/getUser?id=1');
+      expect(res.status).toBe(200);
+      expect(res.body).toEqual({ user: 'user not found' });
+    } catch (err) {
+      console.error(err);
+    } finally {
+      client.release();
+    }
   });
 });

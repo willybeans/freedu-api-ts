@@ -5,7 +5,7 @@ const router = Router();
 // Define your REST API endpoints here
 
 router.get('/healthcheck', (req: Request, res: Response) => {
-  res.send('healthcheck');
+  res.status(200).send('healthcheck');
 });
 
 router.get('/getUser', Users.getUser);

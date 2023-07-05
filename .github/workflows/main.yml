@@ -1,26 +1,68 @@
-name: Demo GitHub Actions
+name: Run On Main - Lint/tests
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
 
+# Environment variables used by the `client.js` script to create
+# a new PostgreSQL table.
+env:
+  # The hostname used to communicate with the PostgreSQL service container
+  POSTGRES_HOST: localhost
+  # The default PostgreSQL port
+  POSTGRES_PORT: 5432
+  # Set username for database
+  POSTGRES_USER: postgres
+  # Set name of database
+  POSTGRES_NAME: postgres
+  # Set Password client
+  POSTGRES_CLIENT_PASSWORD: postgres
+
 jobs:
-  test-job:
+  runner-job:
+    # You must use a Linux environment when using service containers or container jobs
     runs-on: ubuntu-latest
+
+    # Service containers to run with `runner-job`
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - 5432:5432
+
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+      # Downloads a copy of the code in your repository before running CI tests
+      - name: Check out repository code
+        uses: actions/checkout@v3
 
-    - name: Use Node 18.x
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18.x'
-        cache: 'npm'
-    - name: Install dependencies
-      run: npm ci
+      - name: Use Node 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
 
-    - name: Test
-      run: npm test
-    - name: Lint
-      run: npm run lint
+      - name: Connect to PostgreSQL
+        # Runs a script that creates a PostgreSQL table, populates
+        # the table with data, and then retrieves the data
+        run: node client.js
+          # Required password for postgres server
+
+      - name: Test
+        run: npm test
+      - name: Lint
+        run: npm run lint
