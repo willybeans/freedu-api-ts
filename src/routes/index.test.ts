@@ -3,12 +3,6 @@ import { app } from '../app';
 import { pool } from '../config/db';
 import { type Pool } from 'pg';
 
-console.log('test:', process.env.POSTGRES_CLIENT_PASSWORD);
-console.log('test:', process.env.POSTGRES_NAME);
-console.log('test:', process.env.POSTGRES_HOST);
-console.log('test:', process.env.POSTGRES_PORT);
-console.log('test:', process.env.POSTGRES_USER);
-
 describe('testing endpoints with database', () => {
   let pgPool: Pool;
 

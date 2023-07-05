@@ -5,12 +5,6 @@ dotenv.config();
 
 const port: number = parseInt(<string>process.env.POSTGRES_PORT, 10) || 5432;
 
-console.log('test:', process.env.POSTGRES_CLIENT_PASSWORD);
-console.log('test:', process.env.POSTGRES_NAME);
-console.log('test:', process.env.POSTGRES_HOST);
-console.log('test:', process.env.POSTGRES_PORT);
-console.log('test:', process.env.POSTGRES_USER);
-
 export const pool = new Pool({
   user: process.env.POSTGRES_USER,
   host: process.env.POSTGRES_HOST,
