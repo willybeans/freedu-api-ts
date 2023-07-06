@@ -9,21 +9,16 @@ fi
 # PostgreSQL database credentials
 DB_HOST="localhost"
 DB_PORT="5432"
-DB_NAME="lang_api"
+DB_NAME="test_db"
 DB_USER="postgres"
 DB_PASSWORD="password"
 
-# SQL statements to create the database and table
+# SQL statements to create the database, table, and insert test data
 SQL_CREATE_DB="CREATE DATABASE $DB_NAME;"
 SQL_CREATE_TABLE="CREATE TABLE users (
     id INT,
-    age INT,
     username TEXT,
-    password TEXT,
-    time_created INT,
-    first_name TEXT,
-    last_name TEXT,
-    email TEXT
+    password TEXT
 );"
 SQL_CREATE_SEQUENCE="CREATE SEQUENCE id_seq
   START WITH 1
@@ -31,6 +26,11 @@ SQL_CREATE_SEQUENCE="CREATE SEQUENCE id_seq
   MINVALUE 1
   NO MAXVALUE
   CACHE 1;
+"
+SQL_INSERT_DATA="INSERT INTO users (id, username, password) VALUES
+  (1, 'JohnDoe', 'pass123'),
+  (2, 'JaneSmith', 'secret456'),
+  (3, 'BobJohnson', 'password789');
 "
 
 # Create the database
@@ -42,3 +42,5 @@ psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" -c "$SQL_CREATE_TAB
 # Create Sequence
 psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" -c "$SQL_CREATE_SEQUENCE"
 
+# Insert test data
+psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" -c "$SQL_INSERT_DATA"
