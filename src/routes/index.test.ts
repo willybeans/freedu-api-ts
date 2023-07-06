@@ -14,16 +14,16 @@ describe('testing endpoints with database', () => {
     await pgPool.end();
   });
 
-  it('/getUser?id=2', async () => {
+  it('/getUser?id=1', async () => {
     const client = await pgPool.connect();
     try {
-      const res = await request(app).get('/getUser?id=2');
+      const res = await request(app).get('/getUser?id=1');
       expect(res.status).toBe(200);
       expect(res.body).toEqual({
         user: {
-          id: 2,
-          username: 'testname',
-          password: '123456abcdef'
+          id: 1,
+          username: 'JohnDoe',
+          password: 'pass123'
         }
       });
     } catch (err) {
@@ -33,10 +33,10 @@ describe('testing endpoints with database', () => {
     }
   });
 
-  it('when user doesnt exist /getUser?id=1', async () => {
+  it('when user doesnt exist /getUser?id=4', async () => {
     const client = await pgPool.connect();
     try {
-      const res = await request(app).get('/getUser?id=1');
+      const res = await request(app).get('/getUser?id=4');
       expect(res.status).toBe(200);
       expect(res.body).toEqual({ user: 'user not found' });
     } catch (err) {

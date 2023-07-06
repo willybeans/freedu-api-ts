@@ -13,23 +13,10 @@ pgclient.connect();
 const sequence =
   'CREATE SEQUENCE id_seq START WITH 1 INCREMENT BY 1 MINVALUE 1 NO MAXVALUE CACHE 1;';
 const table = 'CREATE TABLE users (id INT, username TEXT, password TEXT);';
-// id INT,
-// age INT,
-// username TEXT,
-// password TEXT,
-// time_created INT,
-// first_name TEXT,
-// last_name TEXT,
-// email TEXT
+
 const text =
   'INSERT INTO users(id, username, password) VALUES($1, $2, $3) RETURNING *';
-const values = [
-  '2',
-  'testname',
-  '123456abcdef'
-  // '88 Colin P Kelly Jr St, San Francisco, CA 94107, United States',
-  // 'octocat@github.com'
-];
+const values = ['1', 'JohnDoe', 'pass123'];
 
 pgclient.query(table, (err, res) => {
   if (err) throw err;
