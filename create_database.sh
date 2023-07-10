@@ -15,10 +15,10 @@ DB_PASSWORD="password"
 
 # SQL statements to create the database, table, and insert test data
 SQL_CREATE_DB="CREATE DATABASE $DB_NAME;"
-SQL_CREATE_TABLE="CREATE TABLE users (
-    id INT,
-    username TEXT,
-    password TEXT
+SQL_CREATE_USERS="CREATE TABLE users (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  username VARCHAR(50) NOT NULL,
+  password VARCHAR(50) NOT NULL
 );"
 SQL_CREATE_SEQUENCE="CREATE SEQUENCE id_seq
   START WITH 1
@@ -28,19 +28,39 @@ SQL_CREATE_SEQUENCE="CREATE SEQUENCE id_seq
   CACHE 1;
 "
 SQL_INSERT_DATA="INSERT INTO users (id, username, password) VALUES
-  (1, 'JohnDoe', 'pass123'),
-  (2, 'JaneSmith', 'secret456'),
-  (3, 'BobJohnson', 'password789');
+  ('d2792a62-86a4-4c49-a909-b1e762c683a3', 'JohnDoe', 'pass123'),
+  ('fc1b7d29-6aeb-432b-9354-7e4c65f15d4e', 'JaneSmith', 'secret456'),
+  ('9f0b1b5f-9cc5-4d14-aa9c-82cbe87e8a95', 'BobJohnson', 'password789');
 "
+
+SQL_CREATE_GAMEROOMS="CREATE TABLE game_rooms (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);"
+
+SQL_CREATE_MESSAGES="CREATE TABLE messages (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  chat_room_id UUID REFERENCES game_rooms(id),
+  user_id UUID REFERENCES users(id),
+  content TEXT NOT NULL,
+  sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);"
 
 # Create the database
 psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -c "$SQL_CREATE_DB"
 
-# Create the table
-psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" -c "$SQL_CREATE_TABLE"
+# Create the table users
+psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" -c "$SQL_CREATE_USERS"
+
+# Create the table game Rooms
+psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" -c "$SQL_CREATE_GAMEROOMS"
 
 # Create Sequence
 psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" -c "$SQL_CREATE_SEQUENCE"
 
 # Insert test data
 psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" -c "$SQL_INSERT_DATA"
+
+# Insert test data
+psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" -c "$SQL_CREATE_MESSAGES"

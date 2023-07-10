@@ -1,5 +1,8 @@
-// import express, { Request, Response } from 'express';
+import { type Request } from 'express';
+import * as http from 'http';
+import { type Socket } from 'net';
 import { app } from './app';
+import { upgradeConnection } from './websocket';
 // import session from 'express-session';
 // import enforceSSL from 'express-sslify';
 import dotenv from 'dotenv';
@@ -31,6 +34,11 @@ const port = process.env.PORT;
 
 // Other middleware and routes
 
-app.listen(port, () => {
+const server = http.createServer(app).listen(port, () => {
   console.log('Server is running on port 3000');
+});
+
+server.on('upgrade', async (request: Request, socket: Socket, head: Buffer) => {
+  await upgradeConnection(request, socket, head).catch((e) => { console.log('e', e); }
+  );
 });
