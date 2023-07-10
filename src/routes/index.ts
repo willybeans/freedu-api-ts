@@ -1,5 +1,5 @@
 import { type Request, type Response, Router } from 'express';
-import { Users } from '../controllers/index';
+import { Games, Users } from '../controllers/index';
 
 const router = Router();
 // Define your REST API endpoints here
@@ -12,9 +12,6 @@ router.get('/getUser', Users.getUser);
 
 // router.get("/getUser", requireAuth, Users.getUser);
 
-router.get('/users', (req: Request, res: Response) => {
-  // Implement the logic to retrieve users from the database
-  // Send the response back to the client
-});
+router.get('/addGame', Games.addGame);
 
 export default router;

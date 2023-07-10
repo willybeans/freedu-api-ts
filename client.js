@@ -12,17 +12,32 @@ pgclient.connect();
 
 const sequence =
   'CREATE SEQUENCE id_seq START WITH 1 INCREMENT BY 1 MINVALUE 1 NO MAXVALUE CACHE 1;';
-const table = 'CREATE TABLE users (id INT, username TEXT, password TEXT);';
+const users =
+  'CREATE TABLE users (id UUID DEFAULT gen_random_uuid() PRIMARY KEY, username VARCHAR(50) NOT NULL, password VARCHAR(50) NOT NULL);';
+
+const games =
+  'CREATE TABLE game_rooms (id UUID DEFAULT gen_random_uuid() PRIMARY KEY, name VARCHAR(100) NOT NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);';
+
+const messages =
+  'CREATE TABLE messages (id UUID DEFAULT gen_random_uuid() PRIMARY KEY, chat_room_id UUID REFERENCES game_rooms(id), user_id UUID REFERENCES users(id), content TEXT NOT NULL, sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);';
 
 const text =
   'INSERT INTO users(id, username, password) VALUES($1, $2, $3) RETURNING *';
-const values = ['1', 'JohnDoe', 'pass123'];
+const values = ['d2792a62-86a4-4c49-a909-b1e762c683a3', 'JohnDoe', 'pass123'];
 
-pgclient.query(table, (err, res) => {
+pgclient.query(users, (err, res) => {
   if (err) throw err;
-  console.log('create table success', res.rows[0]);
+  console.log('create users table success', res.rows[0]);
 });
 
+pgclient.query(games, (err, res) => {
+  if (err) throw err;
+  console.log('create users game rooms success', res.rows[0]);
+});
+pgclient.query(messages, (err, res) => {
+  if (err) throw err;
+  console.log('create messages success', res.rows[0]);
+});
 pgclient.query(sequence, (err, res) => {
   if (err) throw err;
   console.log('create sequence success', res.rows[0]);
