@@ -1,10 +1,11 @@
 import * as ws from 'ws';
 import { type Request } from 'express';
 import { type Socket } from 'net';
-import { Games } from './models';
+import { Games, Messages } from './models';
 
 interface ExtWebSocket extends ws.WebSocket {
   isAlive: boolean;
+  roomId: string;
 }
 
 type Sockets = Record<string, ws.WebSocketServer>;
@@ -15,22 +16,45 @@ function createSockets (id: string, newSocket: ws.WebSocketServer) {
       ws.isAlive = true;
     }
 
+    ws.roomId = id;
     ws.isAlive = true;
     ws.on('error', console.error);
     ws.on('pong', () => {
       heartbeat();
     });
 
-    ws.on('message', function (data, isBinary) {
-      ws.send(data);
+    ws.on('message', async (data: ws.RawData, isBinary) => {
+      const message = isBinary ? data : data.toString();
+      let parse;
+      if (typeof message === 'string') {
+        try {
+          parse = JSON.parse(message);
+        } catch (e) {
+          console.error('parse failed:', e);
+        }
+      }
+
+      const { userId, content, contentType } = parse;
+      let newContent;
+      if (contentType === 'message') {
+        newContent = await Messages.addMessage(userId, ws.roomId, content);
+      }
+
+      let finalContent: string;
+      try {
+        finalContent = JSON.stringify(newContent);
+      } catch (e) {
+        console.error('stringify failed', e);
+      }
+
       newSocket.clients.forEach((client) => {
         if (client.readyState === ws.OPEN) {
-          client.send(data, { binary: isBinary });
+          client.send(finalContent);
         }
       });
     });
 
-    ws.on('close', function () {
+    ws.on('close', () => {
       ws.send('closed');
       clearInterval(interval);
     });
