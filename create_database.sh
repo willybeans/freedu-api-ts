@@ -40,10 +40,10 @@ SQL_CREATE_GAMEROOMS="CREATE TABLE game_rooms (
 );"
 
 SQL_CREATE_MESSAGES="CREATE TABLE messages (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   chat_room_id UUID REFERENCES game_rooms(id),
   user_id UUID REFERENCES users(id),
   content TEXT NOT NULL,
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );"
 

@@ -7,6 +7,8 @@ import morganConfig from './config/morganConfig';
 
 export const app: Express = express();
 
+app.use(express.json());
+
 app.use(morganConfig);
 // Redirect HTTP to HTTPS (if you have a valid SSL certificate)
 // app.use(enforceSSL.HTTPS({ trustProtoHeader: true }));
