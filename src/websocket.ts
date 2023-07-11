@@ -34,19 +34,22 @@ function createSockets (id: string, newSocket: ws.WebSocketServer) {
         }
       }
 
-      const { userId, content } = parse;
-      const newMessage = await Messages.addMessage(userId, ws.roomId, content);
+      const { userId, content, contentType } = parse;
+      let newContent;
+      if (contentType === 'message') {
+        newContent = await Messages.addMessage(userId, ws.roomId, content);
+      }
 
-      let finalMessage: string;
+      let finalContent: string;
       try {
-        finalMessage = JSON.stringify(newMessage);
+        finalContent = JSON.stringify(newContent);
       } catch (e) {
         console.error('stringify failed', e);
       }
 
       newSocket.clients.forEach((client) => {
         if (client.readyState === ws.OPEN) {
-          client.send(finalMessage);
+          client.send(finalContent);
         }
       });
     });
