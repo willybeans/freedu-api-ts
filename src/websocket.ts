@@ -33,10 +33,17 @@ function createSockets (id: string, newSocket: ws.WebSocketServer) {
           console.error('parse failed:', e);
         }
       }
-
+      /*
+      all messages must contain proper body content
+      {
+      "userId": "12345",
+      "content": "message",
+      "contentType": "chat/game"
+      }
+      */
       const { userId, content, contentType } = parse;
       let newContent;
-      if (contentType === 'message') {
+      if (contentType === 'chat') {
         newContent = await Messages.addMessage(userId, ws.roomId, content);
       }
 
