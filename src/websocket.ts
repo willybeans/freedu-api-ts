@@ -10,9 +10,9 @@ interface ExtWebSocket extends ws.WebSocket {
 
 type Sockets = Record<string, ws.WebSocketServer>;
 
-function createSockets (id: string, newSocket: ws.WebSocketServer) {
-  newSocket.on('connection', function connection (ws: ExtWebSocket) {
-    function heartbeat () {
+function createSockets(id: string, newSocket: ws.WebSocketServer) {
+  newSocket.on('connection', function connection(ws: ExtWebSocket) {
+    function heartbeat() {
       ws.isAlive = true;
     }
 
@@ -85,7 +85,7 @@ function createSockets (id: string, newSocket: ws.WebSocketServer) {
 
 const socketStore: Sockets = {};
 
-export async function upgradeConnection (
+export async function upgradeConnection(
   request: Request,
   socket: Socket,
   head: Buffer
