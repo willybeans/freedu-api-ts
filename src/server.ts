@@ -35,10 +35,11 @@ const port = process.env.PORT;
 // Other middleware and routes
 
 const server = http.createServer(app).listen(port, () => {
-  console.log('Server is running on port 3000');
+  console.log(`Server is running on port ${port}`);
 });
 
 server.on('upgrade', async (request: Request, socket: Socket, head: Buffer) => {
-  await upgradeConnection(request, socket, head).catch((e) => { console.log('e', e); }
-  );
+  await upgradeConnection(request, socket, head).catch((e) => {
+    console.log('e', e);
+  });
 });
