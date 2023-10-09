@@ -6,7 +6,11 @@ interface Queries {
     username: string,
     hashedPassword: string
   ) => Promise<boolean>;
-  getUser: (username: string) => Promise<boolean>;
+  getUser: (username: string) => Promise<{
+    id: string;
+    username: string;
+    password: string;
+  }>;
   deleteUserById: (userId: string) => Promise<boolean>;
 }
 

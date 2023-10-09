@@ -5,7 +5,13 @@ interface Queries {
     chat_room_id: string,
     user_id: string,
     content: string
-  ) => Promise<boolean>;
+  ) => Promise<{
+    chat_room_id: string;
+    user_id: string;
+    content: string;
+    id: string;
+    sent_at: string;
+  }>;
   getMessageById: (user_id: string) => Promise<boolean>;
   deleteMessageById: (userId: string) => Promise<boolean>;
 }
@@ -17,6 +23,7 @@ const queries: Queries = {
       'INSERT INTO messages VALUES ($1, $2, $3) RETURNING *',
       [chatRoomId, userId, content]
     );
+
     return result.rows[0];
   },
   getMessageById: async (id) => {
