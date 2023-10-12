@@ -31,18 +31,15 @@ export const gameActions = async (
     }
     switch (key) {
       case 'setPlayer': {
-        //
         const newPlayer = createPlayer(userId);
         gameInstance.setPlayer(newPlayer);
         break;
       }
       case 'removePlayer': {
-        //
         gameInstance.removePlayer(userId);
         break;
       }
       case 'gameStart': {
-        // gameInstance.newDeck();
         gameInstance.dealCards();
         break;
       }
@@ -69,25 +66,11 @@ export const gameActions = async (
         }
         break;
       }
-      // case 'setSecretAndOtherTeam': // combining with set picker
-      // gameInstance.setSecretAndOtherTeam(gameCommand.setTeams as string);
-      // break;
       /* eslint-disable no-fallthrough */
-      // case 'calculateHandWinner':
-      // gameInstance.calculateHandWinner();
-      // break;
       case 'calculateScore':
-      // gameInstance.calculateScore();
-      // break;
       case 'resetPlayersForNewTurn':
-      // gameInstance.resetPlayersForNewTurn();
-      // break;
       case 'resetGameForNewTurn':
-      // gameInstance.resetGameForNewTurn();
-      // break;
       case 'resetAll':
-        // gameInstance[key]
-        // gameInstance.resetAll();
         console.log('testing fallthrough: ', key);
         gameInstance[key]();
         break;

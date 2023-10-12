@@ -116,7 +116,6 @@ import { getPlayerIndex } from './gameUtil';
 export function createGame(): Game {
   const game: Game = {
     players: [] as GamePlayer[],
-    // shuffledDeck: [],
     currentCardsOnTable: [], // this needs to include player id!!
     currentPlayer: 0, // this tracks whos turn it is
     picker: '',
@@ -133,10 +132,6 @@ export function createGame(): Game {
       if (index !== -1) game.players.splice(index, 1);
       return game.players;
     },
-    // newDeck: () => {
-    //   const deck = createDeck();
-    //   game.shuffledDeck = [...shuffleDeck(deck)];
-    // },
     moveToNext: () => {
       if (game.currentPlayer !== game.players.length - 1) {
         game.currentPlayer += 1;
@@ -181,10 +176,9 @@ export function createGame(): Game {
     dealCards: () => {
       const deck = createDeck();
       const shuffledDeck: DeckOfCards = [...shuffleDeck(deck)];
-
       let cardCount = 0;
       const playerCount: number = game.players.length;
-      // const deck = game.shuffledDeck as DeckOfCards;
+
       if (playerCount === 3) {
         cardCount = 10;
       } else if (playerCount === 4) {
@@ -321,7 +315,6 @@ export function createGame(): Game {
     },
     resetGameForNewTurn: () => {
       game.picker = '';
-      // game.shuffledDeck = [];
       game.secretTeam = [];
       game.blindCards = [];
       game.otherTeam = [];
