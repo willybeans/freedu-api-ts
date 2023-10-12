@@ -90,7 +90,7 @@ export const createDeck = (): DeckOfCards => {
 
   for (const suit in Deck.cardSuites) {
     for (const type in Deck.cardTypes) {
-      arr.push(suit + type);
+      arr.push(type + suit);
     }
   }
 

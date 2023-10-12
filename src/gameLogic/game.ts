@@ -108,53 +108,61 @@ import {
   type DeckOfCards,
   type Game,
   type GamePlayer,
-  type Players,
   type TableCard,
   type WinningCard
 } from '../types';
 import { getPlayerIndex } from './gameUtil';
 
-export function game (players: Players): Game {
+export function createGame(): Game {
   const game: Game = {
-    players: [...players], // this needs to be opt in
-    shuffledDeck: [],
-    currentCardsOnTable: [], // this needs to have player id!!
-    currentPlayer: 0,
+    players: [] as GamePlayer[],
+    // shuffledDeck: [],
+    currentCardsOnTable: [], // this needs to include player id!!
+    currentPlayer: 0, // this tracks whos turn it is
     picker: '',
     secretTeam: [],
     otherTeam: [],
     blindCards: [],
     setScoreMode: 'picker', // leastor, doubler, picker(team)
-    newDeck: () => {
-      const deck = createDeck();
-      game.shuffledDeck = shuffleDeck(deck);
+    setPlayer: (player: GamePlayer) => {
+      const index = getPlayerIndex(game.players, player.id);
+      if (index === -1) game.players.push(player);
     },
+    removePlayer: (playerId: string) => {
+      const index = getPlayerIndex(game.players, playerId);
+      if (index !== -1) game.players.splice(index, 1);
+      return game.players;
+    },
+    // newDeck: () => {
+    //   const deck = createDeck();
+    //   game.shuffledDeck = [...shuffleDeck(deck)];
+    // },
     moveToNext: () => {
-      const current = game.currentPlayer;
-      if (current !== game.players.length - 1) {
-        game.currentPlayer += current;
+      if (game.currentPlayer !== game.players.length - 1) {
+        game.currentPlayer += 1;
       } else {
         game.currentPlayer = 0;
       }
     },
-    setPicker: (playerId: string, players: Players) => {
+    setPicker: (playerId: string) => {
       game.picker = playerId;
-      // const count = players.length;
-      // for(count)
-      const index = getPlayerIndex(players, playerId);
+
+      const index = getPlayerIndex(game.players, playerId);
       if (game.blindCards.length > 0) {
         game.players[index].makePicker(game.blindCards);
         game.blindCards = [];
       }
     },
     setSecretAndOtherTeam: (namedCard: string) => {
-      // JD AH AC AS AD
-      // when a player picks
-      // 1 The picker states that whoever holds the Jack of Diamonds
-      // is their partner. This is the most common method.
-      // 2 The picker may name the Ace of Hearts, Ace of Clubs, or Ace of Spades
-      // and whoever holds this card becomes their partner.
-      players.forEach((player: GamePlayer) => {
+      /*
+       JD AH AC AS AD
+       when a player picks
+       1 The picker states that whoever holds the Jack of Diamonds
+       is their partner. This is the most common method.
+       2 The picker may name the Ace of Hearts, Ace of Clubs, or Ace of Spades
+       and whoever holds this card becomes their partner.
+      */
+      game.players.forEach((player) => {
         if (player.id !== game.picker) {
           const inHand: boolean = player.hand.some((card) => {
             return card === namedCard;
@@ -171,9 +179,12 @@ export function game (players: Players): Game {
       });
     },
     dealCards: () => {
+      const deck = createDeck();
+      const shuffledDeck: DeckOfCards = [...shuffleDeck(deck)];
+
       let cardCount = 0;
       const playerCount: number = game.players.length;
-      const deck = game.shuffledDeck as DeckOfCards;
+      // const deck = game.shuffledDeck as DeckOfCards;
       if (playerCount === 3) {
         cardCount = 10;
       } else if (playerCount === 4) {
@@ -183,26 +194,22 @@ export function game (players: Players): Game {
         cardCount = 6;
       }
 
-      game.players.forEach((p: GamePlayer) => {
-        p.hand.pop();
-      });
-
       for (cardCount; cardCount > 0; cardCount--) {
         for (
           let playerCount = 0;
           playerCount < game.players.length;
           playerCount++
         ) {
-          const card: string | undefined = deck.pop();
+          const card: string | undefined = shuffledDeck.pop();
           if (card && card !== '') {
             game.players[playerCount].hand.push(card);
           }
         }
       }
-      game.blindCards = deck.splice(0, 2);
+      game.blindCards = shuffledDeck.splice(0, 2);
     },
-    tableReceiveCard: () => {
-      game.players.forEach((p: GamePlayer) => {
+    tableReceiveAllCards: () => {
+      game.players.forEach((p) => {
         game.currentCardsOnTable.push(p.cardToPlay);
         p.cardToPlay = {
           player: '',
@@ -230,14 +237,17 @@ export function game (players: Players): Game {
         cleanIds.push(x.card);
       });
 
-      const winner = getPlayerIndex(players, winningCard.player);
+      const winner = getPlayerIndex(game.players, winningCard.player);
       game.players[winner].wonCards.push(...cleanIds);
+      game.currentCardsOnTable = [];
     },
     calculateScore: (): void => {
       // cardValues -- dont forget that the gameMode matters with this
 
       // first total all players cards
-      game.players.forEach((p: GamePlayer) => { p.getTotalForCards(); });
+      game.players.forEach((p) => {
+        p.getTotalForCards();
+      });
 
       // next set the scores based on game modes:
       if (game.setScoreMode === 'picker') {
@@ -254,7 +264,7 @@ export function game (players: Players): Game {
           otherPoints *= val;
         };
 
-        game.players.forEach((p: GamePlayer) => {
+        game.players.forEach((p) => {
           if (game.secretTeam.includes(p.id)) {
             secretTeamTotal += p.wonCardsTotal;
           } else {
@@ -284,7 +294,7 @@ export function game (players: Players): Game {
           }
         }
 
-        game.players.forEach((p: GamePlayer) => {
+        game.players.forEach((p) => {
           if (game.secretTeam.includes(p.id)) {
             if (secretTeamTotal > 61) {
               p.isPicker ? (p.score += pickerPoints) : (p.score += otherPoints);
@@ -305,11 +315,13 @@ export function game (players: Players): Game {
       // }
     },
     resetPlayersForNewTurn: () => {
-      game.players.forEach((p: GamePlayer) => { p.resetForNextTurn(); });
+      game.players.forEach((p) => {
+        p.resetForNextTurn();
+      });
     },
     resetGameForNewTurn: () => {
       game.picker = '';
-      game.shuffledDeck = [];
+      // game.shuffledDeck = [];
       game.secretTeam = [];
       game.blindCards = [];
       game.otherTeam = [];
@@ -320,7 +332,9 @@ export function game (players: Players): Game {
       game.resetPlayersForNewTurn();
     },
     resetAll: () => {
-      game.players.forEach((p: GamePlayer) => { p.resetForNewGame(); });
+      game.players.forEach((p) => {
+        p.resetForNewGame();
+      });
       game.resetGameForNewTurn();
     }
   };

@@ -1,5 +1,10 @@
 import { Messages, Users } from './models';
-import { type ApiMessage, type Commands, type Game, type ParsedWebSocketContent } from './types';
+import {
+  type ApiMessage,
+  type Commands,
+  type Game,
+  type ParsedWebSocketContent
+} from './types';
 import { createPlayer } from './gameLogic/players';
 import { getPlayerIndex } from './gameLogic/gameUtil';
 
@@ -10,6 +15,11 @@ export const gameActions = async (
 ): Promise<string> => {
   const { userId, gameCommand, contentType } = parsedContent;
   let newContent;
+  /*
+    gameCommand can be 1 or 2:
+    1 - gameCommand: <Commands>
+    2 - gameCommand: { <Commands>: value<string>}
+  */
   if (gameCommand) {
     let key = '' as Commands;
     let keys: string[];
@@ -21,46 +31,49 @@ export const gameActions = async (
     }
     switch (key) {
       case 'setPlayer': {
+        //
         const newPlayer = createPlayer(userId);
         gameInstance.setPlayer(newPlayer);
         break;
       }
       case 'removePlayer': {
-        // test this
+        //
         gameInstance.removePlayer(userId);
         break;
       }
-
-      case 'gameStart':
-        gameInstance.newDeck();
+      case 'gameStart': {
+        // gameInstance.newDeck();
         gameInstance.dealCards();
         break;
-      case 'setPicker': // test this
+      }
+      case 'setPickerAndTeams': {
         gameInstance.setPicker(userId);
+        gameInstance.setSecretAndOtherTeam(
+          gameCommand.setPickerAndTeams as string
+        );
         break;
+      }
       case 'userPlaysCard': {
-        // test this
-        // gameInstance.setPicker(userId);
+        const previousPlayer = gameInstance.currentPlayer;
         const index = getPlayerIndex(gameInstance.players, userId);
         gameInstance.players[index].playCard(
           gameCommand.userPlaysCard as string
         );
-        let allPlayersPlayed = true;
-        gameInstance.players.forEach((p) => {
-          if (p.cardToPlay.card === '') {
-            allPlayersPlayed = false;
-          }
-        });
-        if (allPlayersPlayed) {
+        gameInstance.moveToNext();
+
+        if (gameInstance.currentPlayer < previousPlayer) {
+          // on last player move
           gameInstance.tableReceiveAllCards();
+          // may be better ui to have this be its own request
+          gameInstance.calculateHandWinner();
         }
         break;
       }
-      case 'setSecretAndOtherTeam': // test this
-        gameInstance.setSecretAndOtherTeam(gameCommand.setTeams as string);
-        break;
+      // case 'setSecretAndOtherTeam': // combining with set picker
+      // gameInstance.setSecretAndOtherTeam(gameCommand.setTeams as string);
+      // break;
       /* eslint-disable no-fallthrough */
-      case 'calculateHandWinner':
+      // case 'calculateHandWinner':
       // gameInstance.calculateHandWinner();
       // break;
       case 'calculateScore':
@@ -83,29 +96,17 @@ export const gameActions = async (
     }
 
     newContent = {
-      // ApiMessage
-      // gameState: {
-      //   players: gameInstance.players,
-      //   shuffledDeck: gameInstance.shuffledDeck,
-      //   currentCardsOnTable: gameInstance.currentCardsOnTable,
-      //   currentPlayer: gameInstance.currentPlayer,
-      //   picker: gameInstance.picker,
-      //   secretTeam: gameInstance.secretTeam,
-      //   otherTeam: gameInstance.otherTeam,
-      //   blindCards: gameInstance.blindCards,
-      //   setScoreMode: gameInstance.setScoreMode
-      // },
       gameInstance,
       gameCommand,
       userId,
       contentType,
       roomId
-      // user_name: getUser?.username ?? ''
     };
   }
 
   let finalContent = '';
   try {
+    // stringify removes all functions!
     finalContent = JSON.stringify(newContent);
   } catch (e) {
     console.error('stringify failed in chat module', e);

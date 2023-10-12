@@ -1,7 +1,7 @@
 import { cardScoreValues } from './deck';
 import { type GamePlayer, type TableCard } from '../types';
 
-export function player (id: string): GamePlayer {
+export function createPlayer(id: string): GamePlayer {
   const player = {
     id,
     hand: [] as string[],
@@ -9,15 +9,14 @@ export function player (id: string): GamePlayer {
     wonCardsTotal: 0,
     isPicker: false,
     wonCards: [] as string[],
-    cardToPlay: {} as TableCard, // this might belong in the front end
+    cardToPlay: {} as TableCard,
     makePicker: (cards: string[]) => {
       player.isPicker = true;
       player.wonCards.push(...cards);
     },
     playCard: (card: string) => {
       const index = player.hand.indexOf(card);
-      player.hand.splice(index, 1); // returns new array
-      // const newHand = player.hand.filter(c => card === c)
+      player.hand.splice(index, 1);
       player.cardToPlay = {
         card,
         player: player.id

@@ -1,11 +1,11 @@
-import { player } from './players';
+import { createPlayer } from './players';
 import { type GamePlayer } from '../types';
 
 describe('player', () => {
   let gamePlayer: GamePlayer;
 
   beforeEach(() => {
-    gamePlayer = player('player1');
+    gamePlayer = createPlayer('player1');
   });
 
   it('should create a new game player with the provided id', () => {

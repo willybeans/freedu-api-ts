@@ -4,7 +4,7 @@ export type Commands =
   | 'userPlaysCard'
   | 'gameStart'
   | 'gameResetAll'
-  | 'setPicker'
+  | 'setPickerAndTeams'
   | 'gameCalculateScores'
   | 'setTeams'
   | 'setSecretAndOtherTeam'

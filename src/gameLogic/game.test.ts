@@ -1,5 +1,5 @@
-import { game } from './game';
-import { player } from './players';
+import { createGame } from './game';
+import { createPlayer } from './players';
 import { type Game, type Players } from '../types';
 
 describe('game', () => {
@@ -7,9 +7,16 @@ describe('game', () => {
   let gameInstance: Game;
 
   beforeEach(() => {
-    players = [player('player1'), player('player2'), player('player3')];
+    players = [
+      createPlayer('player1'),
+      createPlayer('player2'),
+      createPlayer('player3')
+    ];
 
-    gameInstance = game(players);
+    gameInstance = createGame();
+    gameInstance.setPlayer(players[0]);
+    gameInstance.setPlayer(players[1]);
+    gameInstance.setPlayer(players[2]);
   });
 
   afterEach(() => {
@@ -22,7 +29,7 @@ describe('game', () => {
   });
 
   it('should initialize the game with the necessary properties', () => {
-    expect(gameInstance.shuffledDeck).toEqual([]);
+    // expect(gameInstance.shuffledDeck).toEqual([]);
     expect(gameInstance.currentCardsOnTable).toEqual([]);
     expect(gameInstance.currentPlayer).toBe(0);
     expect(gameInstance.picker).toBe('');
@@ -34,7 +41,7 @@ describe('game', () => {
 
   it('should set the picker and move blind cards to the picker', () => {
     gameInstance.blindCards = ['QC', 'KD'];
-    gameInstance.setPicker('player1', players);
+    gameInstance.setPicker('player1');
 
     expect(gameInstance.picker).toBe('player1');
     expect(gameInstance.players[0].isPicker).toBe(true);
@@ -62,7 +69,7 @@ describe('game', () => {
 
   it('should deal cards to players and move blind cards to the table', () => {
     // gameInstance.shuffledDeck = ['C7', 'C8', 'C9', 'C10', 'CJ', 'CQ', 'CK', 'CA', 'D7', 'D8', 'D9', 'DJ', 'DQ', 'DK', 'DA'];
-    gameInstance.newDeck();
+    // gameInstance.newDeck();
     gameInstance.dealCards();
 
     expect(gameInstance.players[0].hand.length).toEqual(10);
@@ -78,7 +85,7 @@ describe('game', () => {
     gameInstance.players[1].cardToPlay = { player: 'player2', card: 'SC' };
     gameInstance.players[2].cardToPlay = { player: 'player3', card: 'KS' };
 
-    gameInstance.tableReceiveCard();
+    gameInstance.tableReceiveAllCards();
 
     expect(gameInstance.currentCardsOnTable).toEqual([
       { player: 'player1', card: 'AH' },
@@ -267,7 +274,7 @@ describe('game', () => {
       { player: 'player2', card: 'EH' },
       { player: 'player3', card: 'NH' }
     ];
-    gameInstance.newDeck();
+    // gameInstance.newDeck();
 
     gameInstance.resetGameForNewTurn();
 
@@ -276,7 +283,7 @@ describe('game', () => {
     expect(gameInstance.otherTeam).toEqual([]);
     expect(gameInstance.currentPlayer).toBe(0);
     expect(gameInstance.currentCardsOnTable).toEqual([]);
-    expect(gameInstance.shuffledDeck).toEqual([]);
+    // expect(gameInstance.shuffledDeck).toEqual([]);
     expect(gameInstance.players[0].hand).toEqual([]);
     expect(gameInstance.players[1].hand).toEqual([]);
     expect(gameInstance.players[2].hand).toEqual([]);
@@ -292,7 +299,7 @@ describe('game', () => {
       { player: 'player2', card: 'KD' },
       { player: 'player3', card: 'JD' }
     ];
-    gameInstance.newDeck();
+    // gameInstance.newDeck();
     gameInstance.players[0].score = 5;
     gameInstance.players[1].score = 2;
     gameInstance.players[2].score = -3;
@@ -304,7 +311,7 @@ describe('game', () => {
     expect(gameInstance.otherTeam).toEqual([]);
     expect(gameInstance.currentPlayer).toBe(0);
     expect(gameInstance.currentCardsOnTable).toEqual([]);
-    expect(gameInstance.shuffledDeck).toEqual([]);
+    // expect(gameInstance.shuffledDeck).toEqual([]);
     expect(gameInstance.players[0].hand).toEqual([]);
     expect(gameInstance.players[1].hand).toEqual([]);
     expect(gameInstance.players[2].hand).toEqual([]);

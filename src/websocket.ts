@@ -1,7 +1,10 @@
 import * as ws from 'ws';
 import { type Request } from 'express';
 import { type Socket } from 'net';
-import { Games, Messages, Users } from './models';
+import { Games } from './models';
+import { createGame } from './gameLogic/game';
+import { type Game, type ParsedWebSocketContent } from './types';
+import { chatActions, gameActions } from './utils';
 
 interface ExtWebSocket extends ws.WebSocket {
   isAlive: boolean;
@@ -11,11 +14,11 @@ interface ExtWebSocket extends ws.WebSocket {
 type Sockets = Record<string, ws.WebSocketServer>;
 
 function createSockets(id: string, newSocket: ws.WebSocketServer) {
+  const gameInstance: Game = createGame();
   newSocket.on('connection', function connection(ws: ExtWebSocket) {
     function heartbeat() {
       ws.isAlive = true;
     }
-
     ws.roomId = id;
     ws.isAlive = true;
     ws.on('error', console.error);
@@ -25,12 +28,8 @@ function createSockets(id: string, newSocket: ws.WebSocketServer) {
 
     ws.on('message', async (data: ws.RawData, isBinary) => {
       const message = isBinary ? data : data.toString();
-      interface parsed {
-        userId: string;
-        content: string;
-        contentType: 'chat' | 'game';
-      }
-      let parse = {} as parsed;
+
+      let parse = {} as ParsedWebSocketContent;
       if (typeof message === 'string') {
         try {
           parse = JSON.parse(message);
@@ -46,38 +45,12 @@ function createSockets(id: string, newSocket: ws.WebSocketServer) {
       "contentType": chat | game,
       }
       */
-
-      interface ApiMessage {
-        chat_room_id?: string;
-        user_name?: string;
-        user_id?: string;
-        content?: string;
-        id?: string;
-        sent_at?: string;
-        contentType: 'chat' | 'game';
+      let finalContent = '';
+      if (parse.contentType === 'chat') {
+        finalContent = await chatActions(parse, ws.roomId);
+      } else if (parse.contentType === 'game') {
+        finalContent = await gameActions(gameInstance, parse, ws.roomId);
       }
-
-      const { userId, content, contentType } = parse;
-
-      let getUser;
-      let addMessage;
-      if (contentType === 'chat') {
-        addMessage = await Messages.addMessage(userId, ws.roomId, content);
-        getUser = await Users.getUser(userId);
-      }
-      const newContent: ApiMessage = {
-        ...addMessage,
-        contentType,
-        user_name: getUser?.username ?? ''
-      };
-
-      let finalContent: string;
-      try {
-        finalContent = JSON.stringify(newContent);
-      } catch (e) {
-        console.error('stringify failed in chat', e);
-      }
-
       newSocket.clients.forEach((client) => {
         if (client.readyState === ws.OPEN) {
           client.send(finalContent);

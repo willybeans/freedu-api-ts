@@ -19,11 +19,11 @@ describe('Deck', () => {
       const validTypes = Object.keys(Deck.cardTypes);
 
       for (const card of deck) {
-        const suit = card[0];
-        const type = card[1];
+        const value = card[0];
+        const suit = card[1];
 
         expect(validSuits).toContain(suit);
-        expect(validTypes).toContain(type);
+        expect(validTypes).toContain(value);
       }
     });
   });

@@ -32,7 +32,7 @@ export interface GameState {
 
 export interface Game {
   players: GamePlayer[];
-  shuffledDeck: string[];
+  // shuffledDeck: string[];
   currentCardsOnTable: TableCard[];
   currentPlayer: number;
   picker: string;
@@ -40,12 +40,14 @@ export interface Game {
   otherTeam: string[];
   blindCards: string[];
   setScoreMode: 'leaster' | 'doubler' | 'picker'; // is this right? picker? im not sure
-  newDeck: () => void;
+  setPlayer: (player: GamePlayer) => void;
+  removePlayer: (playerId: string) => Players;
+  // newDeck: () => void;
   moveToNext: () => void;
-  setPicker: (playerId: string, players: Players) => void;
+  setPicker: (playerId: string) => void;
   setSecretAndOtherTeam: (namedCard: string) => void;
   dealCards: () => void;
-  tableReceiveCard: () => void;
+  tableReceiveAllCards: () => void;
   calculateHandWinner: () => void;
   calculateScore: () => void;
   resetPlayersForNewTurn: () => void;
