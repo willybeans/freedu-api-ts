@@ -1,5 +1,5 @@
 // import { getPlayerIndex } from './gameUtil';
-import { player } from './players';
+import { createPlayer } from './players';
 // import {  } from '../types';
 
 import {
@@ -12,9 +12,9 @@ import { type Player, type Players, type TableCard } from '../types';
 
 describe('getPlayerIndex', () => {
   const gamePlayers: Players = [
-    player('player1'),
-    player('player2'),
-    player('player3')
+    createPlayer('player1'),
+    createPlayer('player2'),
+    createPlayer('player3')
   ];
 
   it('should return the correct index of the player', () => {
