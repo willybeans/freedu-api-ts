@@ -27,6 +27,7 @@ type GameCommands = {
 
 export interface ParsedWebSocketContent {
   userId: string;
+  userName: string;
   chatMessage?: string;
   gameCommand?: GameCommands;
   contentType: 'chat' | 'game';

@@ -102,7 +102,6 @@ export const chatActions = async (
   roomId: string
 ): Promise<string> => {
   const { userId, chatMessage = '', contentType } = parsedContent;
-
   const addMessage = await Messages.addMessage(userId, roomId, chatMessage);
   const getUser = await Users.getUser(userId);
 
