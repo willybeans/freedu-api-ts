@@ -37,6 +37,7 @@
     "@typescript-eslint/no-misused-promises": "off",
     "@typescript-eslint/consistent-type-assertions": "off",
     "@typescript-eslint/no-base-to-string": "off",
+    "@typescript-eslint/space-before-function-paren": "off",
 
     // plugin: node/recommended
     "node/exports-style": ["error", "module.exports"],
