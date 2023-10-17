@@ -40,6 +40,7 @@ export const gameActions = async (
         break;
       }
       case 'gameStart': {
+        gameInstance.inProgress = true;
         gameInstance.dealCards();
         break;
       }

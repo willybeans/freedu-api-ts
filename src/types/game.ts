@@ -42,6 +42,7 @@ export interface Game {
   setScoreMode: 'leaster' | 'doubler' | 'picker'; // is this right? picker? im not sure
   setPlayer: (player: GamePlayer) => void;
   removePlayer: (playerId: string) => Players;
+  inProgress: boolean;
   // newDeck: () => void;
   moveToNext: () => void;
   setPicker: (playerId: string) => void;
