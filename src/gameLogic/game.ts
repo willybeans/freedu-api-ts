@@ -122,6 +122,7 @@ export function createGame(): Game {
     secretTeam: [],
     otherTeam: [],
     blindCards: [],
+    inProgress: false,
     setScoreMode: 'picker', // leastor, doubler, picker(team)
     setPlayer: (player: GamePlayer) => {
       const index = getPlayerIndex(game.players, player.id);
