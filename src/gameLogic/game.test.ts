@@ -8,9 +8,9 @@ describe('game', () => {
 
   beforeEach(() => {
     players = [
-      createPlayer('player1'),
-      createPlayer('player2'),
-      createPlayer('player3')
+      createPlayer('player1', 'player1'),
+      createPlayer('player2', 'player2'),
+      createPlayer('player3', 'player3')
     ];
 
     gameInstance = createGame();

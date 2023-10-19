@@ -31,7 +31,9 @@ export const gameActions = async (
     }
     switch (key) {
       case 'setPlayer': {
-        const newPlayer = createPlayer(userId);
+        const user = await Users.getUser(userId);
+        const newPlayer = createPlayer(userId, user.username);
+
         gameInstance.setPlayer(newPlayer);
         break;
       }

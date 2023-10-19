@@ -24,8 +24,7 @@ describe('testing endpoints with database', () => {
       expect(res.body).toEqual({
         user: {
           id: 'd2792a62-86a4-4c49-a909-b1e762c683a3',
-          username: 'JohnDoe',
-          password: 'pass123'
+          username: 'JohnDoe'
         }
       });
     } catch (err) {

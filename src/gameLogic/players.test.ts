@@ -5,7 +5,7 @@ describe('player', () => {
   let gamePlayer: GamePlayer;
 
   beforeEach(() => {
-    gamePlayer = createPlayer('player1');
+    gamePlayer = createPlayer('player1', 'player1');
   });
 
   it('should create a new game player with the provided id', () => {
