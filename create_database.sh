@@ -18,7 +18,6 @@ SQL_CREATE_DB="CREATE DATABASE $DB_NAME;"
 SQL_CREATE_USERS="CREATE TABLE users (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   username VARCHAR(50) NOT NULL,
-  password VARCHAR(50) NOT NULL
 );"
 SQL_CREATE_SEQUENCE="CREATE SEQUENCE id_seq
   START WITH 1
@@ -28,9 +27,9 @@ SQL_CREATE_SEQUENCE="CREATE SEQUENCE id_seq
   CACHE 1;
 "
 SQL_INSERT_DATA="INSERT INTO users (id, username, password) VALUES
-  ('d2792a62-86a4-4c49-a909-b1e762c683a3', 'JohnDoe', 'pass123'),
-  ('fc1b7d29-6aeb-432b-9354-7e4c65f15d4e', 'JaneSmith', 'secret456'),
-  ('9f0b1b5f-9cc5-4d14-aa9c-82cbe87e8a95', 'BobJohnson', 'password789');
+  ('d2792a62-86a4-4c49-a909-b1e762c683a3', 'JohnDoe'),
+  ('fc1b7d29-6aeb-432b-9354-7e4c65f15d4e', 'JaneSmith'),
+  ('9f0b1b5f-9cc5-4d14-aa9c-82cbe87e8a95', 'BobJohnson');
 "
 
 SQL_CREATE_GAMEROOMS="CREATE TABLE game_rooms (

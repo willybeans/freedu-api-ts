@@ -1,9 +1,10 @@
 import { cardScoreValues } from './deck';
 import { type GamePlayer, type TableCard } from '../types';
 
-export function createPlayer(id: string): GamePlayer {
+export function createPlayer(id: string, userName: string): GamePlayer {
   const player = {
     id,
+    userName,
     hand: [] as string[],
     score: 0,
     wonCardsTotal: 0,

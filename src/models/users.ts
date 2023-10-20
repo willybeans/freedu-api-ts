@@ -1,11 +1,7 @@
 import query from '../config/db';
 
 interface Queries {
-  addUser: (
-    id: string,
-    username: string,
-    hashedPassword: string
-  ) => Promise<boolean>;
+  addUser: (userName: string) => Promise<boolean>;
   getUser: (username: string) => Promise<{
     id: string;
     username: string;
@@ -16,10 +12,10 @@ interface Queries {
 
 const queries: Queries = {
   // number of rows inserted. 1 = success, 0 = failure
-  addUser: async (id, username, hashedPassword) => {
+  addUser: async (userName: string) => {
     const result = await query(
-      'INSERT INTO USERS VALUES ($1, $2, $3) RETURNING *',
-      [id, username, hashedPassword]
+      'INSERT INTO users (username) VALUES ($1) RETURNING *',
+      [userName]
     );
     return result.rows[0];
   },
