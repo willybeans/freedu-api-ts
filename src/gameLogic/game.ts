@@ -201,7 +201,12 @@ export function createGame(): Game {
           }
         }
       }
-      game.blindCards = shuffledDeck.splice(0, 2);
+
+      // 4 players is the only mode where you need 4 in blind
+      game.blindCards = shuffledDeck.splice(
+        0,
+        game.players.length === 4 ? 4 : 2
+      );
     },
     tableReceiveAllCards: () => {
       game.players.forEach((p) => {
