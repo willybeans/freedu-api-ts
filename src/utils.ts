@@ -98,7 +98,7 @@ export const gameActions = async (
         \ */
         let allPlayed = true;
         gameInstance.players.forEach((p, i) => {
-          if (p.cardToPlay.card === '') {
+          if (p.cardToPlay.card === '' || p.cardToPlay.card === undefined) {
             allPlayed = false;
           }
         });
