@@ -80,22 +80,6 @@ export const gameActions = async (
         }
         gameInstance.moveToNext();
 
-        // game starts, picker offer first from left of dealer
-
-        // first hand is played by the picker
-
-        // whoever wins a hand is the next hand starting player
-
-        // so things we need:
-        /*
-        dealer tracking var <number>
-          - this just rotates clockwise indefinitely
-        turn order tracking var <number>
-          - this defaults to picker at first
-          then
-          - this is set based on prev winner
-
-        \ */
         let allPlayed = true;
         gameInstance.players.forEach((p, i) => {
           if (p.cardToPlay.card === '' || p.cardToPlay.card === undefined) {
@@ -108,12 +92,6 @@ export const gameActions = async (
           // may be better ui to have this be its own request
           gameInstance.calculateHandWinner();
         }
-        // if (gameInstance.currentPlayer < previousPlayer) {
-        //   // on last player move
-        //   gameInstance.tableReceiveAllCards();
-        //   // may be better ui to have this be its own request
-        //   gameInstance.calculateHandWinner();
-        // }
         break;
       }
       /* eslint-disable no-fallthrough */
