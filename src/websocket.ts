@@ -16,6 +16,22 @@ type Sockets = Record<string, ws.WebSocketServer>;
 function createSockets(id: string, newSocket: ws.WebSocketServer) {
   const gameInstance: Game = createGame();
   newSocket.on('connection', function connection(ws: ExtWebSocket) {
+    (async () => {
+      const finalContent = await gameActions(
+        gameInstance,
+        {
+          userId: '12345',
+          userName: '12345',
+          gameCommand: 'initial',
+          contentType: 'game'
+        },
+        ws.roomId
+      );
+      ws.send(finalContent);
+    })().catch((err) => {
+      console.error(err);
+    });
+
     function heartbeat() {
       ws.isAlive = true;
     }
@@ -88,7 +104,7 @@ export async function upgradeConnection(
   head: Buffer
 ) {
   const pathContent = request.url.split('/');
-  const id = pathContent[2];
+  const id = pathContent[2].toString();
   // confirm base path before query
   if (pathContent[1] === 'games') {
     // if game id isnt in db then terminate

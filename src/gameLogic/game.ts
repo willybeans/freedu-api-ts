@@ -117,7 +117,11 @@ export function createGame(): Game {
   const game: Game = {
     players: [] as GamePlayer[],
     currentCardsOnTable: [], // this needs to include player id!!
-    currentPlayer: 0, // this tracks whos turn it is
+    isStart: true, // blind shows start, redundant?
+    dealer: 0,
+    // this needs changed on dealer (always clockwise of dealer)
+    // this also changes to reflect hand winnner
+    currentPlayer: 1, // this tracks whos turn it is
     picker: '',
     secretTeam: [],
     otherTeam: [],
@@ -240,6 +244,8 @@ export function createGame(): Game {
       const winner = getPlayerIndex(game.players, winningCard.player);
       game.players[winner].wonCards.push(...cleanIds);
       game.currentCardsOnTable = [];
+      // winner always starts next hand
+      game.currentPlayer = winner;
     },
     calculateScore: (): void => {
       // cardValues -- dont forget that the gameMode matters with this

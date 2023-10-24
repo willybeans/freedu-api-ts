@@ -31,7 +31,8 @@ describe('game', () => {
   it('should initialize the game with the necessary properties', () => {
     // expect(gameInstance.shuffledDeck).toEqual([]);
     expect(gameInstance.currentCardsOnTable).toEqual([]);
-    expect(gameInstance.currentPlayer).toBe(0);
+    expect(gameInstance.dealer).toBe(0);
+    expect(gameInstance.currentPlayer).toBe(1);
     expect(gameInstance.picker).toBe('');
     expect(gameInstance.secretTeam).toEqual([]);
     expect(gameInstance.otherTeam).toEqual([]);
@@ -75,7 +76,7 @@ describe('game', () => {
     expect(gameInstance.players[0].hand.length).toEqual(10);
     expect(gameInstance.players[1].hand.length).toEqual(10);
     expect(gameInstance.players[2].hand.length).toEqual(10);
-    expect(gameInstance.currentPlayer).toBe(0);
+    expect(gameInstance.currentPlayer).toBe(1);
     expect(gameInstance.currentCardsOnTable).toEqual([]);
     expect(gameInstance.blindCards.length).toEqual(2);
   });

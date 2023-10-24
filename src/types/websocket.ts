@@ -2,6 +2,7 @@ export type Commands =
   | 'setPlayer'
   | 'removePlayer'
   | 'userPlaysCard'
+  | 'passBlindToNext'
   | 'gameStart'
   | 'gameResetAll'
   | 'setPickerAndTeams'
@@ -12,7 +13,9 @@ export type Commands =
   | 'calculateScore'
   | 'resetPlayersForNewTurn'
   | 'resetGameForNewTurn'
-  | 'resetAll';
+  | 'resetAll'
+  | 'initial'
+  | 'namedCard';
 
 // type CommandContents = {
 //   seatNumber?: number;
@@ -29,7 +32,7 @@ export interface ParsedWebSocketContent {
   userId: string;
   userName: string;
   chatMessage?: string;
-  gameCommand?: GameCommands;
+  gameCommand?: GameCommands | Commands;
   contentType: 'chat' | 'game';
 }
 
