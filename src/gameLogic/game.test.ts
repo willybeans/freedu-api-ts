@@ -253,18 +253,6 @@ describe('game', () => {
     expect(gameInstance.players[2].score).toBe(1);
   });
 
-  it('should reset the players for a new turn', () => {
-    gameInstance.players[0].hand = ['SH', 'EH'];
-    gameInstance.players[0].isPicker = true;
-    gameInstance.players[0].cardToPlay = { player: 'player1', card: 'SH' };
-
-    gameInstance.resetPlayersForNewTurn();
-
-    expect(gameInstance.players[0].hand).toEqual([]);
-    expect(gameInstance.players[0].isPicker).toBe(false);
-    expect(gameInstance.players[0].cardToPlay).toEqual({});
-  });
-
   it('should reset the game for a new turn', () => {
     gameInstance.picker = 'player1';
     gameInstance.secretTeam = ['player1', 'player2'];
@@ -277,12 +265,13 @@ describe('game', () => {
     ];
     // gameInstance.newDeck();
 
-    gameInstance.resetGameForNewTurn();
+    gameInstance.resetGameForNewRound();
 
     expect(gameInstance.picker).toBe('');
     expect(gameInstance.secretTeam).toEqual([]);
     expect(gameInstance.otherTeam).toEqual([]);
-    expect(gameInstance.currentPlayer).toBe(0);
+    expect(gameInstance.dealer).toBe(1);
+    expect(gameInstance.currentPlayer).toBe(2);
     expect(gameInstance.currentCardsOnTable).toEqual([]);
     // expect(gameInstance.shuffledDeck).toEqual([]);
     expect(gameInstance.players[0].hand).toEqual([]);
@@ -310,7 +299,7 @@ describe('game', () => {
     expect(gameInstance.picker).toBe('');
     expect(gameInstance.secretTeam).toEqual([]);
     expect(gameInstance.otherTeam).toEqual([]);
-    expect(gameInstance.currentPlayer).toBe(0);
+    expect(gameInstance.currentPlayer).toBe(1);
     expect(gameInstance.currentCardsOnTable).toEqual([]);
     // expect(gameInstance.shuffledDeck).toEqual([]);
     expect(gameInstance.players[0].hand).toEqual([]);

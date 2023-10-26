@@ -12,7 +12,7 @@ export type Commands =
   | 'calculateHandWinner'
   | 'calculateScore'
   | 'resetPlayersForNewTurn'
-  | 'resetGameForNewTurn'
+  | 'resetGameForNewRound'
   | 'resetAll'
   | 'initial'
   | 'namedCard';

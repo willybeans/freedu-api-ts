@@ -47,13 +47,13 @@ export interface Game {
   inProgress: boolean;
   // newDeck: () => void;
   moveToNext: () => void;
+  incrementDealer: () => void;
   setPicker: (playerId: string) => void;
   setSecretAndOtherTeam: (namedCard: string) => void;
   dealCards: () => void;
   tableReceiveAllCards: () => void;
   calculateHandWinner: () => void;
   calculateScore: () => void;
-  resetPlayersForNewTurn: () => void;
-  resetGameForNewTurn: () => void;
+  resetGameForNewRound: () => void;
   resetAll: () => void;
 }

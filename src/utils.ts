@@ -59,7 +59,7 @@ export const gameActions = async (
       }
       case 'setPickerAndTeams': {
         // add logic to set starting player as picker
-        gameInstance.isStart = false; // ?
+        gameInstance.isStart = false; // consider removing
         gameInstance.setPicker(userId);
 
         if (typeof gameCommand === 'object') {
@@ -81,10 +81,13 @@ export const gameActions = async (
         gameInstance.moveToNext();
 
         let allPlayed = true;
+        let allHandsEmpty = true;
         gameInstance.players.forEach((p, i) => {
           if (p.cardToPlay.card === '' || p.cardToPlay.card === undefined) {
             allPlayed = false;
           }
+
+          if (p.hand.length !== 0) allHandsEmpty = false;
         });
 
         if (allPlayed) {
@@ -92,12 +95,16 @@ export const gameActions = async (
           // may be better ui to have this be its own request
           gameInstance.calculateHandWinner();
         }
+
+        if (allHandsEmpty) {
+          gameInstance.calculateScore();
+          gameInstance.resetGameForNewRound();
+        }
         break;
       }
       /* eslint-disable no-fallthrough */
-      case 'calculateScore':
-      case 'resetPlayersForNewTurn':
-      case 'resetGameForNewTurn':
+      case 'calculateScore': // delete?
+      case 'resetGameForNewRound':
       // move dealer number?
       case 'resetAll':
         console.log('testing fallthrough: ', key);

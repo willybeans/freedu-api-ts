@@ -319,28 +319,42 @@ export function createGame(): Game {
       } // else if (game.setScoreMode === 'doubler') {
       // } else if (game.setScoreMode === 'leaster') {
       // }
+      // resetGameForNewTurn() ???
     },
-    resetPlayersForNewTurn: () => {
-      game.players.forEach((p) => {
-        p.resetForNextTurn();
-      });
+    incrementDealer: () => {
+      if (game.dealer !== game.players.length - 1) {
+        game.dealer += 1;
+      } else {
+        game.dealer = 0;
+      }
     },
-    resetGameForNewTurn: () => {
+    resetGameForNewRound: () => {
       game.picker = '';
       game.secretTeam = [];
       game.blindCards = [];
       game.otherTeam = [];
+      game.inProgress = false;
       game.setScoreMode = 'picker';
-      game.currentPlayer = 0;
+      game.incrementDealer();
+      if (game.dealer + 1 > game.players.length - 1) {
+        game.currentPlayer = 0;
+      } else {
+        game.currentPlayer = game.dealer + 1;
+      }
+      // game.currentPlayer = game.dealer + 1; // needs ot be iterated
       game.currentCardsOnTable = [];
       // game.newDeck(); // should this be left for the FE?
-      game.resetPlayersForNewTurn();
+      game.players.forEach((p) => {
+        p.resetForNextRound();
+      });
     },
     resetAll: () => {
       game.players.forEach((p) => {
         p.resetForNewGame();
       });
-      game.resetGameForNewTurn();
+      game.resetGameForNewRound();
+      game.currentPlayer = 1;
+      game.dealer = 0;
     }
   };
   return game;
