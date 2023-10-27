@@ -3,6 +3,7 @@ import query from '../config/db';
 interface Queries {
   addGame: (id: string, name: string) => Promise<gameRoom>;
   getGame: (userId: string) => Promise<gameRoom | undefined>;
+  getAllGames: () => Promise<gameRoom[] | undefined>;
   deleteGameById: (userId: string) => Promise<boolean>;
 }
 
@@ -19,11 +20,16 @@ const queries: Queries = {
       'INSERT INTO game_rooms VALUES ($1, $2) RETURNING *',
       [id, name]
     );
+    console.log('dbresult', result);
     return result.rows[0];
   },
   getGame: async (id) => {
     const result = await query('SELECT * FROM game_rooms WHERE id=$1', [id]);
     return result.rows[0];
+  },
+  getAllGames: async () => {
+    const result = await query('SELECT * FROM game_rooms', []);
+    return result.rows;
   },
   deleteGameById: async (id) => {
     // also delete all chats!

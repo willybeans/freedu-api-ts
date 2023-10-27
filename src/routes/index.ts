@@ -11,9 +11,9 @@ router.get('/healthcheck', (req: Request, res: Response) => {
 
 router.get('/getUser', cors(), Users.getUser);
 router.get('/addUser', cors(), Users.addUser);
+router.get('/getAllGames', cors(), Games.getAllGames);
+router.get('/addGame', cors(), Games.addGame);
 
 // router.get("/getUser", requireAuth, Users.getUser);
-
-router.get('/addGame', Games.addGame);
 
 export default router;
