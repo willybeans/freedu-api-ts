@@ -1,8 +1,8 @@
 import { Games, Utils } from '../models/';
 import { type Request, type Response } from 'express';
 
-async function addGame (req: Request, res: Response) {
-  if (typeof req.query.name !== 'string') {
+async function addGame(req: Request, res: Response) {
+  if (typeof req.query.name !== 'string' || req.query.name === '') {
     res.status(400);
     return;
   }
@@ -11,11 +11,11 @@ async function addGame (req: Request, res: Response) {
 
   const newGame = await Games.addGame(id.gen_random_uuid, name);
   res.status(200).json({
-    newGame
+    ...newGame
   });
 }
 
-async function getGame (req: Request, res: Response) {
+async function getGame(req: Request, res: Response) {
   if (typeof req.query.id !== 'string') return;
   const id = req.query.id;
   const game = await Games.getGame(id);
@@ -24,7 +24,14 @@ async function getGame (req: Request, res: Response) {
   });
 }
 
-async function deleteGameById (req: Request, res: Response) {
+async function getAllGames(req: Request, res: Response) {
+  const games = await Games.getAllGames();
+  res.status(200).json({
+    game: games === undefined ? 'games not found' : games
+  });
+}
+
+async function deleteGameById(req: Request, res: Response) {
   if (typeof req.query.id !== 'string') return;
   const id = req.query.id;
   const deleteGame = await Games.deleteGameById(id);
@@ -34,6 +41,7 @@ async function deleteGameById (req: Request, res: Response) {
 }
 
 export default {
+  getAllGames,
   addGame,
   getGame,
   deleteGameById
