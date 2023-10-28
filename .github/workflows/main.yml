@@ -1,9 +1,9 @@
 name: Run On Main - Lint/tests
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 # Environment variables used by the `client.js` script to create
 # a new PostgreSQL table.
@@ -59,10 +59,19 @@ jobs:
       - name: Connect to PostgreSQL
         # Runs a script that creates a PostgreSQL table, populates
         # the table with data, and then retrieves the data
-        run: node client.js
+        run:
+          node client.js
           # Required password for postgres server
 
       - name: Test
         run: npm test
       - name: Lint
         run: npm run lint
+
+      - name: Deploy
+        # Only run this step if the branch is main
+        if: github.ref == 'refs/heads/main'
+        env:
+          deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          curl "$deploy_url"
