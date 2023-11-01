@@ -6,7 +6,7 @@ dotenv.config();
 const port: number = parseInt(<string>process.env.POSTGRES_PORT, 10) || 5432;
 
 export const pool = new Pool(
-  process?.env?.ISPROD !== 'true'
+  process?.env?.ISPROD === 'true'
     ? { connectionString: process.env.POSTGRES_URL }
     : {
         user: process.env.POSTGRES_USER,
