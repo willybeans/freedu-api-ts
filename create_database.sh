@@ -9,7 +9,7 @@ fi
 # PostgreSQL database credentials
 DB_HOST="localhost"
 DB_PORT="5432"
-DB_NAME="test_db"
+DB_NAME="sheepshead"
 DB_USER="postgres"
 DB_PASSWORD="password"
 
@@ -26,7 +26,7 @@ SQL_CREATE_SEQUENCE="CREATE SEQUENCE id_seq
   NO MAXVALUE
   CACHE 1;
 "
-SQL_INSERT_DATA="INSERT INTO users (id, username, password) VALUES
+SQL_INSERT_DATA="INSERT INTO users (id, username) VALUES
   ('d2792a62-86a4-4c49-a909-b1e762c683a3', 'JohnDoe'),
   ('fc1b7d29-6aeb-432b-9354-7e4c65f15d4e', 'JaneSmith'),
   ('9f0b1b5f-9cc5-4d14-aa9c-82cbe87e8a95', 'BobJohnson');
