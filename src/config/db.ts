@@ -5,15 +5,20 @@ dotenv.config();
 
 const port: number = parseInt(<string>process.env.POSTGRES_PORT, 10) || 5432;
 
-export const pool = new Pool({
-  user: process.env.POSTGRES_USER,
-  host: process.env.POSTGRES_HOST,
-  database: process.env.POSTGRES_NAME,
-  password: process.env.POSTGRES_CLIENT_PASSWORD,
-  port
-});
+export const pool = new Pool(
+  process?.env?.ISPROD !== 'true'
+    ? { connectionString: process.env.POSTGRES_URL }
+    : {
+        user: process.env.POSTGRES_USER,
+        host: process.env.POSTGRES_HOST,
+        database: process.env.POSTGRES_NAME,
+        password: process.env.POSTGRES_CLIENT_PASSWORD,
+        port
+      }
+);
+
 pool.on('error', (err) => {
-  console.log(err);
+  console.error('error connecting to db', err);
 });
 
 export const query = async (text: string, values: Array<string | number>) => {
