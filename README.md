@@ -8,6 +8,7 @@ This API application accomplishes the following:
 - unit tests in jest
 - pre-commit lint/prettier hooks that also run tests
 - github actions that run precommit hooks prior to merge to `main`
+- automated deployments through github actions 
 
 #### For Local Development
 
