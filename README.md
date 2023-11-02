@@ -2,7 +2,7 @@
 
 This API application accomplishes the following:
 
-- postgreSQL database connection
+- postgreSQL database
 - express.js
 - typescript
 - unit tests in jest
@@ -14,7 +14,7 @@ This API application accomplishes the following:
 
 - clone project
 - `npm install`
-- make sure to have postgres set up
+- make sure to have postgres set up (https://www.postgresql.org/download/)
 - run the bash script to create the database locally
   - `chmod +x create_database.sh`
   - `bash create_database.sh`
